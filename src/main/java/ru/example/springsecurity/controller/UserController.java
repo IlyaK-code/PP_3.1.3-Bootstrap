@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.example.springsecurity.models.User;
-import ru.example.springsecurity.repo.UserRepo;
+import ru.example.springsecurity.service.UserService;
 
 import java.security.Principal;
 
@@ -13,11 +13,11 @@ import java.security.Principal;
 public class UserController {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserService userService;
 
     @GetMapping("/user")
     public String user(Principal principal, Model model) {
-        User user = userRepo.findByFirstname(principal.getName());
+        User user = userService.getUserByFirstname(principal.getName());
         model.addAttribute("user", user);
         Boolean hasRole = user.getAuthorities().stream().anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
         model.addAttribute("hasRole", hasRole);
